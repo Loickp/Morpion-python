@@ -1,5 +1,3 @@
-from random import randint
-
 #création d'une liste pour la grille à afficher
 board = [' ' for x in range(10)]
 
@@ -14,17 +12,43 @@ def print_board(board):
 
 #fonction qui permet au joueur de choisir la forme qu'il veut utiliser
 def choose():
-    global form
+    global form_1
+    global form_2
 
     choose = int(input("Quelle forme voulez vous choisir, X (=0) ou O (=1) ? "))
     if choose == 0:
-        print("Vous avez choisi X")
-        form = 0
+        print("Joueur 1 : X\nJoueur 2 : O")
+        form_1 = "X"
+        form_2 = "O"
     elif choose == 1:
-        print("Vous avez choisi O")
-        form = 1
+        print("Joueur 1 : O\nJoueur 2 : X")
+        form_1 = "O"
+        form_2 = "X"
     else:
         print("Vous n'avez rien choisi !")
+
+
+#fonction qui permet au joueur de séléctionner la case ou il veut placer sa forme
+def place():
+    global turn
+
+    if turn == 1:
+        x = int(input("Joueur 1 : Quel case ? "))
+
+        if board[x] == " ":
+            board[x] = form_1
+            print_board(board)
+        else:
+            print("Case déjà remplie")
+            return place()
+    else:
+        y = int(input("Joueur 2 : Quel case ? "))
+        if board[y] == " ":
+            board[y] = form_2
+            print_board(board)
+        else:
+            print("Case déjà remplie")
+            return place()
 
 
 #fonction qui verifie la victoire, horizontalement, verticalement et les diagonales
@@ -50,47 +74,22 @@ def verify():
     elif (board[3] == board[5] == board[7]) and board[3] != " ":
         return 1
 
-#fonction qui permet au joueur de séléctionner la case ou il veut placer sa forme
-def place():
-    x = int(input("Quel case ? "))
-    if board[x] == " ":
-        if form == 0:
-            board[x] = "X"
-        else:
-            board[x] = "O"
-        print("Joueur : ")
-        print_board(board)
-    else:
-        print("Case déjà remplie")
-        return place()
 
-#fonction qui détermine la forme de l'ordinateur et place la forme sur la grille
-def ordi():
-    rand = randint(1, 9)
-
-    if form == 0:
-        ordi_form = "O"
-    else:
-        ordi_form = "X"
-
-    if board[rand] == " ":
-        board[rand] = ordi_form
-        print("Ordi : ")
-        print_board(board)
-    else:
-        return ordi()
+def verif_tie():
+    for x in range(1,10):
+        if board[x] != " ":
+            count += 1
 
 choose()
 
-#boucle while qui permet de lancer le jeu
 while True:
+    turn = 1
     place()
-    verify()
     if verify():
-        print("Victory for player")
+        print("Victory for player 1")
         break
-    ordi()
-    verify()
+    turn = 2
+    place()
     if verify():
-        print("Victory for computer")
+        print("Victory for player 2")
         break

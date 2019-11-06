@@ -1,8 +1,10 @@
 from random import randint
+flag = True
 
 class Grille():
     def __init__(self):
-        self.board = [' ']*10
+        #self.board = [' ']*10
+        self.board = ['X', 'O', 'X', 'O', 'X', 'O', 'O', ' ', 'O']
 
     def __getitem__(self, key):
         return self.board[key]
@@ -11,11 +13,11 @@ class Grille():
         self.board[key] = value
 
     def display(self):
-        print(' ' + self.board[1] + ' | ' + self.board[2] + ' | ' + self.board[3])
+        print(' ' + self.board[0] + ' | ' + self.board[1] + ' | ' + self.board[2])
         print('-----------')
-        print(' ' + self.board[4] + ' | ' + self.board[5] + ' | ' + self.board[6])
+        print(' ' + self.board[3] + ' | ' + self.board[4] + ' | ' + self.board[5])
         print('-----------')
-        print(' ' + self.board[7] + ' | ' + self.board[8] + ' | ' + self.board[9])
+        print(' ' + self.board[6] + ' | ' + self.board[7] + ' | ' + self.board[8])
 
     def verify(self):
         x = 1
@@ -38,16 +40,6 @@ class Grille():
         elif (self.board[3] == self.board[5] == self.board[7]) and self.board[3] != " ":
             return 1
 
-    def tie(self):
-        count = 0
-        for x in self.board:
-            if x != " ":
-                count =+ 1
-        if count == 9:
-            return True
-        else:
-            return False
-
 class Joueur():
     def __init__(self):
         self.name = "Joueur"
@@ -61,7 +53,7 @@ class Joueur():
             board.display()
         else:
             print("Case déjà remplie")
-            return place()
+            return self.place()
 
 class Ordinateur():
     def __init__(self):
@@ -78,6 +70,17 @@ class Ordinateur():
         else:
             return self.place()
 
+def tie(board):
+    count = 0
+    for i in range(0, 8):
+        if board[i] != " ":
+            count += 1
+            print(count)
+
+    if count == 8:
+        return True
+    else:
+        return False
 
 
 board = Grille()
@@ -88,12 +91,14 @@ print("Joueur voici votre forme : " + player.shape)
 print("L'ordinateur à comme forme : " + ordi.shape)
 
 while True:
+    tie(board)
+
     player.place()
     if board.verify():
         print("Victory for player")
         break
 
-    if board.tie():
+    if tie(board):
         print("Tie !")
         break
 
