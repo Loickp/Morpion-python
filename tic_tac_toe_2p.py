@@ -75,11 +75,6 @@ def verify():
         return 1
 
 
-def verif_tie():
-    for x in range(1,10):
-        if board[x] != " ":
-            count += 1
-
 choose()
 
 while True:
